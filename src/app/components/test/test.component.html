@@ -1,0 +1,30 @@
+<h3>hello test component</h3>
+<hr>
+<h4>ngIf and ngSwitch</h4>
+<p>Hello {{ showName ? name : 'User' }}</p>
+<p *ngIf="showName">{{name}}</p>
+<p *ngIf="!showName">User</p>
+
+<p *ngIf="showName; else noName">New user {{name}}</p>
+<ng-template #noName>New user: User</ng-template>
+<hr>
+<div [ngSwitch]="greeting">
+  <div *ngSwitchCase="1">Greeting: 1</div>
+  <div *ngSwitchCase="2">Greeting: 2</div>
+  <div *ngSwitchCase="3">Greeting: 3</div>
+  <div *ngSwitchDefault=""></div>
+</div>
+<hr>
+<h4>Propperty bind</h4>
+<div><img src="{{imgUrl}}" alt=""></div>
+<div><img [src]="imgUrl" alt=""></div>
+<div><img bind-src="imgUrl" alt=""></div>
+
+<h5>Image location: <span [textContent]="imgUrl"></span></h5>
+<p [hidden]="articleHide">Post changed</p>
+<button [disabled]="articleHide">Save</button>
+<hr>
+<h4>ngClass</h4>
+<p [class.special]="isSpecial">ngClass test1</p>
+<p [ngClass]="currentClasses">ngClass test2</p>
+

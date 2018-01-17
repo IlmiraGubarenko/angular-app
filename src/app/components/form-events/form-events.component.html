@@ -1,0 +1,104 @@
+<div class="container">
+  <form novalidate class="mt-5" #form="ngForm" (submit)="onSubmit(form)">
+    <div class="form-group">
+      <label>Name</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="user.name"
+        name="name"
+        #nameValue="ngModel"
+        minlength="3"
+        required
+      >
+      <div
+      class="alert alert-danger mt-2"
+      *ngIf="nameValue.errors?.required && nameValue.touched"
+      >
+        Name must be not empty
+      </div>
+      <div
+      class="alert alert-danger mt-2"
+      *ngIf="nameValue.errors?.minlength && nameValue.touched"
+      >
+        Не менее 3 символов
+      </div>
+    </div>
+    <div class="form-group mt-3">
+      <label>Email</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="user.email"
+        name="email"
+        #emailValue="ngModel"
+        email
+        required
+      >
+      <div
+      class="alert alert-danger mt-2"
+      *ngIf="emailValue.errors?.required && emailValue.touched"
+      >
+        Email must be not empty
+      </div>
+      <div
+      class="alert alert-danger mt-2"
+      *ngIf="!emailValue.errors?.required && emailValue.invalid"
+      >
+        Email example: example@example.com
+      </div>
+    </div>
+    <button [disabled]="form.invalid" type="submit" class="btn btn-success">Save</button>
+  </form>
+
+  <table class="table mt-5" *ngIf="users.length">
+    <tr *ngFor="let user of users; let i = index">
+      <td>{{i + 1}}</td>
+      <td>
+        <span [hidden]="user.editing">{{user.name}}</span>
+        <input
+          [hidden]="!user.editing"
+          type="text"
+          class="form-control"
+          [(ngModel)]="user.name"
+          name="name"
+          #nameValue="ngModel"
+          minlength="3"
+          required
+        >
+      </td>
+      <td>
+        <span [hidden]="user.editing">{{user.email}}</span>
+        <input
+          [hidden]="!user.editing"
+          type="text"
+          class="form-control"
+          [(ngModel)]="user.email"
+          name="email"
+          #emailValue="ngModel"
+          email
+          required
+        >
+      </td>
+      <td><button class="btn btn-danger" (click)="removeUser(i)">Delete</button></td>
+      <td [ngSwitch]="user.editing">
+        <button
+          *ngSwitchCase="false"
+          class="btn btn-primary"
+          (click)="editUser(user)"
+        >
+          Edit
+        </button>
+        <button
+          *ngSwitchCase="true"
+          [disabled]="nameValue.errors?.required || emailValue.errors?.required || nameValue.errors?.minlength || emailValue.invalid"
+          class="btn btn-primary"
+          (click)="editUser(user)"
+        >
+            Save
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>
+
