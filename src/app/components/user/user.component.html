@@ -1,4 +1,16 @@
 <div class="container">
+  <div class="input-group mt-3">
+    <input type="text" class="form-control" [(ngModel)]="searchItem">
+    <div class="input-group-append">
+      <button
+        class="btn btn-outline-secondary"
+        type="button"
+        (click)="searchUser(searchItem)"
+      >
+        Search
+      </button>
+    </div>
+  </div>
   <form class="mt-3 mb-5" novalidate #form="ngForm" (ngSubmit)="addUser(form)">
     <div class="form-group">
       <label>Name</label>
@@ -78,10 +90,27 @@
     >
       User edit success
     </div>
+    <div
+      class="alert alert-danger mt-2"
+      *ngIf="userNotFound"
+    >
+      User not found
+    </div>
+    <div
+      class="alert alert-success mt-2"
+      *ngIf="userFound && searchItem"
+    >
+      User found, card№ {{user.id}}
+    </div>
   </form>
   <div class="user-list">
     <div class="alert alert-danger" *ngIf="connectionError">{{connectionError}}</div>
-    <div class="card mb-3" *ngFor="let user of users">
+    <div class="card mb-3"
+         *ngFor="let user of users"
+         [ngClass]="{
+            'bg-success': user.name === searchItem
+         }"
+    >
       <h5 class="card-header" [hidden]="user.edit">{{user.name}}</h5>
       <input
         [hidden]="!user.edit"

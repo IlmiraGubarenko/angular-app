@@ -13,7 +13,8 @@ export class UserComponent implements OnInit {
   user = {
     name: '',
     email: '',
-    edit: false,
+    id: 0,
+    edit: false
   };
   addSuccess:boolean = false;
   addError:boolean = false;
@@ -21,6 +22,9 @@ export class UserComponent implements OnInit {
   removeError:boolean = false;
   editSuccess:boolean = false;
   editError:boolean = false;
+  searchItem:string = '';
+  userNotFound:boolean = false;
+  userFound:boolean = false;
 
   constructor(
     public userService: UserDataService
@@ -81,6 +85,22 @@ export class UserComponent implements OnInit {
         }, 2000);
       } )
     }
+  }
+
+  searchUser(searchItem){
+      this.users.forEach( (user) => {
+        if (user.name === searchItem){
+          this.userFound = true;
+          this.user.id = user.id;
+          searchItem = '';
+        }
+      });
+      if(searchItem){
+        this.userNotFound = true;
+        setTimeout( () => {
+          this.userNotFound = false;
+        }, 3000);
+      }
   }
 
 }
