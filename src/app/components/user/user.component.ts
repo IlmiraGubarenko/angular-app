@@ -9,22 +9,20 @@ import  { UserDataService } from '../../services/user-data.service';
 export class UserComponent implements OnInit {
 
   users:any;
-  connectionError:string = '';
+  newUsers:any;
   user = {
     name: '',
     email: '',
-    id: 0,
     edit: false
   };
+  connectionError:string = '';
   addSuccess:boolean = false;
   addError:boolean = false;
   removeSuccess:boolean = false;
   removeError:boolean = false;
   editSuccess:boolean = false;
   editError:boolean = false;
-  searchItem:string = '';
-  userNotFound:boolean = false;
-  userFound:boolean = false;
+  showUsers:boolean = true;
 
   constructor(
     public userService: UserDataService
@@ -57,6 +55,7 @@ export class UserComponent implements OnInit {
   removeUser(user){
     this.userService.removeUser(this.user).subscribe( user => {
       this.users.splice(user, 1);
+      this.newUsers.splice(user, 1);
       this.removeSuccess = true;
       setTimeout( () => {
         this.removeSuccess = false;
@@ -87,20 +86,14 @@ export class UserComponent implements OnInit {
     }
   }
 
-  searchUser(searchItem){
-      this.users.forEach( (user) => {
-        if (user.name === searchItem){
-          this.userFound = true;
-          this.user.id = user.id;
-          searchItem = '';
-        }
-      });
-      if(searchItem){
-        this.userNotFound = true;
-        setTimeout( () => {
-          this.userNotFound = false;
-        }, 3000);
-      }
-  }
+  searchUsers(searchItem){
 
+    this.newUsers = this.users.filter( user => user.name === searchItem);
+
+    if(searchItem === ''){
+      this.showUsers = true;
+    } else {
+      this.showUsers = false;
+    }
+  }
 }

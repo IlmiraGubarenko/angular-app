@@ -1,15 +1,13 @@
 <div class="container">
   <div class="input-group mt-3">
-    <input type="text" class="form-control" [(ngModel)]="searchItem">
-    <div class="input-group-append">
-      <button
-        class="btn btn-outline-secondary"
-        type="button"
-        (click)="searchUser(searchItem)"
-      >
-        Search
-      </button>
-    </div>
+    <input
+      type="text"
+      placeholder="Search..."
+      class="form-control"
+      [(ngModel)]="searchItem"
+      name="searchItem"
+      (keyup)="searchUsers(searchItem)"
+    >
   </div>
   <form class="mt-3 mb-5" novalidate #form="ngForm" (ngSubmit)="addUser(form)">
     <div class="form-group">
@@ -90,26 +88,57 @@
     >
       User edit success
     </div>
-    <div
-      class="alert alert-danger mt-2"
-      *ngIf="userNotFound"
-    >
-      User not found
-    </div>
-    <div
-      class="alert alert-success mt-2"
-      *ngIf="userFound && searchItem"
-    >
-      User found, card№ {{user.id}}
-    </div>
   </form>
   <div class="user-list">
-    <div class="alert alert-danger" *ngIf="connectionError">{{connectionError}}</div>
-    <div class="card mb-3"
-         *ngFor="let user of users"
-         [ngClass]="{
-            'bg-success': user.name === searchItem
-         }"
+  <div class="alert alert-danger" *ngIf="connectionError">{{connectionError}}</div>
+  <div
+    class="card mb-3"
+
+    *ngFor="let user of users"
+    [ngClass]="{
+        'hideUser': !showUsers
+       }"
+  >
+    <h5 class="card-header" [hidden]="user.edit">{{user.name}}</h5>
+    <input
+      [hidden]="!user.edit"
+      type="text"
+      class="form-control card-header"
+      [(ngModel)]="user.name"
+      name="name"
+      #userName="ngModel"
+      required
+    >
+    <div class="card-body">
+      <p class="card-text" [hidden]="user.edit">{{user.email}}</p>
+      <input
+        [hidden]="!user.edit"
+        type="text"
+        class="form-control card-text mb-2"
+        [(ngModel)]="user.email"
+        name="email"
+        #userEmail="ngModel"
+        email
+        required
+      >
+      <button class="btn btn-danger" (click)="removeUser(user)">Delete</button>
+      <button
+        class="btn btn-primary"
+        (click)="editUser(user)"
+        [disabled]="userName.invalid || userEmail.invalid"
+      >
+        {{user.edit ? 'Save' : 'Edit'}}
+      </button>
+    </div>
+  </div>
+</div>
+  <div class="user-search">
+    <div
+      class="card mb-3"
+      *ngFor="let user of newUsers"
+      [ngClass]="{
+        'hideUser': showUsers
+       }"
     >
       <h5 class="card-header" [hidden]="user.edit">{{user.name}}</h5>
       <input
