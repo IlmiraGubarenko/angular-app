@@ -87,8 +87,7 @@ export class UserComponent implements OnInit {
   }
 
   searchUsers(searchItem){
-
-    this.newUsers = this.users.filter( user => user.name === searchItem);
+    this.newUsers = this.users.filter( user =>  user.name.toLowerCase().indexOf(searchItem) !== -1);
 
     if(searchItem === ''){
       this.showUsers = true;
